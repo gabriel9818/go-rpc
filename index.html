@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cliente Web RPC</title>
+</head>
+<body>
+  <h1>Cliente Web - Suma de Números</h1>
+  <form id="sumarForm">
+    <input type="number" id="a" placeholder="Número A" required />
+    <input type="number" id="b" placeholder="Número B" required />
+    <button type="submit">Calcular</button>
+  </form>
+  <h3 id="resultado"></h3>
+
+  <script>
+    document.getElementById('sumarForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const a = document.getElementById('a').value;
+      const b = document.getElementById('b').value;
+
+      const response = await fetch('http://localhost:8080/sumar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ a: parseInt(a), b: parseInt(b) })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        document.getElementById('resultado').textContent = `Resultado: ${data.resultado}`;
+      } else {
+        document.getElementById('resultado').textContent = 'Error al calcular';
+      }
+    });
+  </script>
+</body>
+</html>
